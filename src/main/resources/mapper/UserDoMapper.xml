@@ -19,4 +19,10 @@
     <result column="UPDATE_BY" property="updateBy" jdbcType="BIGINT" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <select id="selectByExample" parameterType="com.team1.ssm.model.UserDo" resultMap="BaseResultMap">
+    SELECT USER_ID,USER_NAME,USER_SEX,PASS_WORD,USER_PHONE,REAL_NAME,EMAIL
+    FROM tb_user WHERE user_id=#{userId}
+  </select>
+
 </mapper>

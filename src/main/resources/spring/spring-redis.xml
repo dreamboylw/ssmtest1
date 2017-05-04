@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxTotal" value="10"/>
         <property name="maxIdle" value="10"/>
@@ -68,4 +70,26 @@
     <!--</list>-->
     <!--</constructor-arg>-->
     <!--</bean>-->
+
+    <!--cache配置-->
+    <bean id="methodCacheInterceptor" class="com.team1.ssm.intercept.MethodCacheInterceptor">
+        <property name="redisUtil" ref="redisUtil"/>
+    </bean>
+    <bean id="redisUtil" class="com.team1.ssm.util.RedisUtil">
+        <property name="redisTemplate" ref="redisTemplate"/>
+    </bean>
+
+    <!--配置切面拦截方法 -->
+    <aop:config proxy-target-class="true">
+        <!--将com.crossoverJie.service包下的所有select开头的方法加入拦截
+        去掉select则加入所有方法w
+        -->
+        <aop:pointcut id="controllerMethodPointcut" expression="
+        execution(* com.team1.ssm.service.*.select*(..))"/>
+
+        <aop:pointcut id="selectMethodPointcut" expression="
+        execution(* com.team1.ssm.mapper.*Mapper.select*(..))"/>
+
+        <aop:advisor advice-ref="methodCacheInterceptor" pointcut-ref="controllerMethodPointcut"/>
+    </aop:config>
 </beans>
