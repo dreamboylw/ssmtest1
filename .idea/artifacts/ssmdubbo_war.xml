@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ssmdubbo:war">
+    <output-path>$PROJECT_DIR$/ssmdubbo/target</output-path>
+    <root id="archive" name="ssm-dubbo.war">
+      <element id="artifact" artifact-name="ssmdubbo:war exploded" />
+    </root>
+  </artifact>
+</component>

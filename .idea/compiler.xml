@@ -6,10 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ssmtest1" />
+        <module name="common" />
+        <module name="service" />
+        <module name="serviceapi" />
+        <module name="ssmdubbo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="serivceapi" target="1.8" />
+      <module name="server" target="1.5" />
+      <module name="service" target="1.8" />
+      <module name="serviceapi" target="1.8" />
+      <module name="ssmdubbo" target="1.8" />
       <module name="ssmtest1" target="1.8" />
     </bytecodeTargetLevel>
   </component>

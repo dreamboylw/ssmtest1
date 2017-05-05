@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/serviceapi/serviceapi.iml" filepath="$PROJECT_DIR$/serviceapi/serviceapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssmdubbo/ssmdubbo.iml" filepath="$PROJECT_DIR$/ssmdubbo/ssmdubbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/ssmtest1.iml" filepath="$PROJECT_DIR$/ssmtest1.iml" />
     </modules>
   </component>

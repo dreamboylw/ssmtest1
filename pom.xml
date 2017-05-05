@@ -1,12 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.team1.ssm</groupId>
   <artifactId>ssm-test1</artifactId>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   <version>1.0</version>
-  <name>ssm-test1</name>
-  <url>http://maven.apache.org</url>
+
+  <modules>
+    <module>service</module>
+    <module>common</module>
+    <module>serviceapi</module>
+    <module>ssmdubbo</module>
+  </modules>
 
   <properties>
     <java-version>1.8</java-version>
@@ -30,7 +37,7 @@
     <mysql.version>5.1.29</mysql.version>
   </properties>
 
-
+  <dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -102,6 +109,17 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
+      <version>${springframework-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${springframework-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-oxm</artifactId>
       <version>${springframework-version}</version>
     </dependency>
 
@@ -321,26 +339,65 @@
       <version>2.9.0</version>
     </dependency>
 
+    <!--分布式框架dubbo-->
+      <dependency>
+          <groupId>com.alibaba</groupId>
+          <artifactId>dubbo</artifactId>
+          <version>2.5.3</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.springframework</groupId>
+                  <artifactId>spring</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.jboss.netty</groupId>
+                  <artifactId>netty</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.zookeeper</groupId>
+          <artifactId>zookeeper</artifactId>
+          <version>3.4.6</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>com.github.sgroschupf</groupId>
+          <artifactId>zkclient</artifactId>
+          <version>0.1</version>
+      </dependency>
+      <dependency>
+          <groupId>commons-beanutils</groupId>
+          <artifactId>commons-beanutils</artifactId>
+          <version>1.8.0</version>
+      </dependency>
   </dependencies>
+
+  </dependencyManagement>
   <build>
     <finalName>${project.artifactId}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
     <testSourceDirectory>src/test/java</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>**/*.xml</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <includes>
-          <include>**/*.xml</include>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-    </resources>
+    <!--<resources>-->
+      <!--<resource>-->
+        <!--<directory>src/main/java</directory>-->
+        <!--<includes>-->
+          <!--<include>**/*.xml</include>-->
+        <!--</includes>-->
+      <!--</resource>-->
+      <!--<resource>-->
+        <!--<directory>src/main/resources</directory>-->
+        <!--<includes>-->
+          <!--<include>**/*.xml</include>-->
+          <!--<include>**/*.properties</include>-->
+        <!--</includes>-->
+      <!--</resource>-->
+    <!--</resources>-->
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -352,62 +409,62 @@
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12.4</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <!--tomcat服务器启用插件-->
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <port>8282</port>
-          <path>/${project.artifactId}</path>
-          <uriEncoding>UTF-8</uriEncoding>
-          <finalName>${project.artifactId}</finalName>
-          <server>tomcat7</server>
-          <!--<systemProperties>-->
-          <!--<java.util.logging.SimpleFormatter.format>[%4$s] %1$tF %1$tT %3$s %5$s %n</java.util.logging.SimpleFormatter.format>-->
-          <!--</systemProperties>-->
-        </configuration>
-        <!--<executions>-->
-        <!--<execution>-->
-        <!--<id>tomcat-run</id>-->
-        <!--<phase>test</phase>-->
-        <!--<goals>-->
-        <!--<goal>run</goal>-->
-        <!--</goals>-->
-        <!--</execution>-->
-        <!--</executions>-->
-      </plugin>
-      <!--通用mapper生成使用mapper-->
-      <plugin>
-        <groupId>org.mybatis.generator</groupId>
-        <artifactId>mybatis-generator-maven-plugin</artifactId>
-        <version>1.3.2</version>
-        <configuration>
-          <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
-          <overwrite>true</overwrite>
-          <verbose>true</verbose>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper</artifactId>
-            <version>${mapper.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-surefire-plugin</artifactId>-->
+        <!--<version>2.12.4</version>-->
+        <!--<configuration>-->
+          <!--<skipTests>true</skipTests>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
+      <!--&lt;!&ndash;tomcat服务器启用插件&ndash;&gt;-->
+      <!--<plugin>-->
+        <!--<groupId>org.apache.tomcat.maven</groupId>-->
+        <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+        <!--<version>2.2</version>-->
+        <!--<configuration>-->
+          <!--<port>8282</port>-->
+          <!--<path>/${project.artifactId}</path>-->
+          <!--<uriEncoding>UTF-8</uriEncoding>-->
+          <!--<finalName>${project.artifactId}</finalName>-->
+          <!--<server>tomcat7</server>-->
+          <!--&lt;!&ndash;<systemProperties>&ndash;&gt;-->
+          <!--&lt;!&ndash;<java.util.logging.SimpleFormatter.format>[%4$s] %1$tF %1$tT %3$s %5$s %n</java.util.logging.SimpleFormatter.format>&ndash;&gt;-->
+          <!--&lt;!&ndash;</systemProperties>&ndash;&gt;-->
+        <!--</configuration>-->
+        <!--&lt;!&ndash;<executions>&ndash;&gt;-->
+        <!--&lt;!&ndash;<execution>&ndash;&gt;-->
+        <!--&lt;!&ndash;<id>tomcat-run</id>&ndash;&gt;-->
+        <!--&lt;!&ndash;<phase>test</phase>&ndash;&gt;-->
+        <!--&lt;!&ndash;<goals>&ndash;&gt;-->
+        <!--&lt;!&ndash;<goal>run</goal>&ndash;&gt;-->
+        <!--&lt;!&ndash;</goals>&ndash;&gt;-->
+        <!--&lt;!&ndash;</execution>&ndash;&gt;-->
+        <!--&lt;!&ndash;</executions>&ndash;&gt;-->
+      <!--</plugin>-->
+      <!--&lt;!&ndash;通用mapper生成使用mapper&ndash;&gt;-->
+      <!--<plugin>-->
+        <!--<groupId>org.mybatis.generator</groupId>-->
+        <!--<artifactId>mybatis-generator-maven-plugin</artifactId>-->
+        <!--<version>1.3.2</version>-->
+        <!--<configuration>-->
+          <!--<configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>-->
+          <!--<overwrite>true</overwrite>-->
+          <!--<verbose>true</verbose>-->
+        <!--</configuration>-->
+        <!--<dependencies>-->
+          <!--<dependency>-->
+            <!--<groupId>mysql</groupId>-->
+            <!--<artifactId>mysql-connector-java</artifactId>-->
+            <!--<version>${mysql.version}</version>-->
+          <!--</dependency>-->
+          <!--<dependency>-->
+            <!--<groupId>tk.mybatis</groupId>-->
+            <!--<artifactId>mapper</artifactId>-->
+            <!--<version>${mapper.version}</version>-->
+          <!--</dependency>-->
+        <!--</dependencies>-->
+      <!--</plugin>-->
     </plugins>
   </build>
 </project>
